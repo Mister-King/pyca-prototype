@@ -5,15 +5,32 @@
   also includes sourcemaps
 */
 
+const fs = require('fs')
 const gulp = require('gulp')
+const path = require('path')
 const sass = require('gulp-sass')
+const sassVariables = require('gulp-sass-variables')
 const sourcemaps = require('gulp-sourcemaps')
 
 const config = require('./config.json')
 
+// Default cache prefix
+let cacheId = ''
+
+// Inject Sass variables
+const variables = () => {
+  cacheId = cacheId || fs.readFileSync(path.resolve('./app/version.txt'), 'utf-8').trim()
+
+  return {
+    '$govuk-assets-path': cacheId
+      ? `/assets/${cacheId}/` : '/assets/'
+  }
+}
+
 gulp.task('sass', function () {
   return gulp.src(config.paths.assets + '/sass/*.scss')
     .pipe(sourcemaps.init())
+    .pipe(sassVariables(variables()))
     .pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest(config.paths.public + '/stylesheets/'))
@@ -22,6 +39,7 @@ gulp.task('sass', function () {
 gulp.task('sass-documentation', function () {
   return gulp.src(config.paths.docsAssets + '/sass/*.scss')
     .pipe(sourcemaps.init())
+    .pipe(sassVariables(variables()))
     .pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest(config.paths.public + '/stylesheets/'))
@@ -32,6 +50,7 @@ gulp.task('sass-documentation', function () {
 gulp.task('sass-v6', function () {
   return gulp.src(config.paths.v6Assets + '/sass/*.scss')
     .pipe(sourcemaps.init())
+    .pipe(sassVariables(variables()))
     .pipe(sass({
       outputStyle: 'expanded',
       includePaths: [

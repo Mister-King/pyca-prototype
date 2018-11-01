@@ -5,6 +5,7 @@ usage-data-config.json
 .DS_Store
 .start.pid
 .port.tmp
+app/version.txt
 public
 node_modules/*
 .tmuxp.*

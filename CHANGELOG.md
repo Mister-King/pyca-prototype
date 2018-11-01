@@ -1,5 +1,9 @@
 # Unreleased
 
+New features:
+
+- [#627 Add static asset caching (with cache busting)](https://github.com/alphagov/govuk-prototype-kit/pull/627)
+
 Fixes:
 
 - [#647 Fix link context in step-by-step templates](https://github.com/alphagov/govuk-prototype-kit/pull/647)
